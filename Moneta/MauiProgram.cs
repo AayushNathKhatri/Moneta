@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using DataAccess.Service;
+using DataAccess.Service.Interface;
+using Microsoft.Extensions.Logging;
+using MudBlazor.Services;
 
 namespace Moneta
 {
@@ -19,6 +22,8 @@ namespace Moneta
 #if DEBUG
     		builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddMudServices();
 #endif
 
             return builder.Build();

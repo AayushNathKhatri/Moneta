@@ -1,0 +1,32 @@
+﻿@page "/login"
+
+<body>
+    <div class="login-container">
+        <div class="login-content">
+            <div class="left-section">
+                <h1>Enter Your Credentials</h1>
+                <p>Please enter your username and password to login.</p>
+            </div>
+            <div class="right-section">
+                <div class="logo">MONETA</div>
+                <form class="login-form" @onsubmit = "HandelLogin">
+                    <label for="username">Username</label>
+                    <input type="text" @bind="users.Username" placeholder="Enter your username"/>
+
+                    <label for="password">Password</label>
+                    <input type="password" @bind="users.Password" placeholder="Enter your password">
+
+                    @* <label for="currency">Currency</label> *@
+                    @* <select id="currency"> *@
+                    @*     <option value="">Choose an option</option> *@
+                    @*     <option value="usd">USD</option> *@
+                    @*     <option value="eur">EUR</option> *@
+                    @*     <option value="gbp">GBP</option> *@
+                    @* </select> *@
+
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
