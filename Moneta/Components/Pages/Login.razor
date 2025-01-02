@@ -16,14 +16,10 @@
                     <label for="password">Password</label>
                     <input type="password" @bind="users.Password" placeholder="Enter your password">
 
-                    @* <label for="currency">Currency</label> *@
-                    @* <select id="currency"> *@
-                    @*     <option value="">Choose an option</option> *@
-                    @*     <option value="usd">USD</option> *@
-                    @*     <option value="eur">EUR</option> *@
-                    @*     <option value="gbp">GBP</option> *@
-                    @* </select> *@
-
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger">@errorMessage</div>
+                    }
                     <button type="submit">Login</button>
                 </form>
             </div>

@@ -6,7 +6,7 @@ namespace DataModel.Model
     public class UserBase
     {
         protected static readonly string filePath = Path.Combine(FileSystem.AppDataDirectory, "User.json");
-
+        
         protected List<UserModel> LoadUsers() { 
             if(!File.Exists(filePath)) return new List<UserModel>();
             var json = File.ReadAllText(filePath);

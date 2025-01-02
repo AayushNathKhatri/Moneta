@@ -1,22 +1,25 @@
-﻿<div>
-    <div>
-        <a href="home">Moneta</a>
-    </div>
-</div>
+﻿@* <div class="Nav"> *@
+@*     <div class="sidebar"> *@
+@*         <div class="logo">Moneta</div> *@
+@*         <ul class="menu"> *@
+@*             <li><NavLink herf="#">Cash Inflow</NavLink></li> *@
+@*             <li><NavLink herf="#">Cash Outflow</NavLink></li> *@
+@*             <li><NavLink herf="#">Debts</NavLink></li> *@
+@*             <li><NavLink herf="#">Stats</NavLink></li> *@
+@*         </ul> *@
+@*     </div> *@
+@* </div> *@
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="home" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Login">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Login
-            </NavLink>
-        </div>
-    </nav>
-</div>
+<MudPaper Width="250px" Class="d-inline-flex py-3" Elevation="0">
+    <MudNavMenu Class="mud-width-full">
+        <MudText Typo="Typo.h6" Class="px-4">Moneta</MudText>
+        <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Manage your Money</MudText>
+        <MudDivider Class="my-2" />
+        <MudNavLink Href="/cashinflow" Icon="@Icons.Material.Filled.AttachMoney">Cash Inflow's</MudNavLink>
+        <MudNavLink Href="/cashOutflow" Icon="@Icons.Material.Filled.AttachMoney" IconColor="Color.Error">Cash Outflow's</MudNavLink>
+        <MudNavLink Href="/debts" Icon="fas fa-hand-holding-dollar">Debts</MudNavLink>
+        <MudNavLink Href="/stats" Icon="@Icons.Material.Filled.Receipt">Stats</MudNavLink>
+        <MudNavLink Href="/logout" Icon="@Icons.Material.Filled.Logout">Logout</MudNavLink>
+    </MudNavMenu>
+</MudPaper>

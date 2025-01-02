@@ -1,11 +1,10 @@
-
 using DataModel.Model;
 
 namespace Moneta.Components.Pages
 {
     public partial class Login
     {
-        private string? errorMessege;
+        private string? errorMessage;
         public UserModel users { get; set; } = new();
 
         private async void HandelLogin() {
@@ -14,7 +13,7 @@ namespace Moneta.Components.Pages
                 Nav.NavigateTo("/home");
             }
             else {
-                errorMessege = "Invalid username or password";
+                errorMessage = "Invalid username or password";
             }
         }
     }
