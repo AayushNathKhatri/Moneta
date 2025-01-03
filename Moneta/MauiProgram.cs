@@ -23,6 +23,7 @@ namespace Moneta
     		builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ITranctionService, TransactionService>();
             builder.Services.AddMudServices();
 #endif
 

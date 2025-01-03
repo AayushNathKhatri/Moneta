@@ -1,0 +1,57 @@
+﻿@using DataModel.Model
+
+<form class="transaction-form" @onsubmit="HandelForm">
+    <div class="form-group">
+        <label for="transactionName">Transaction Name</label>
+        <input id="transactionName" type="text" class="form-control" @bind="Transaction.TransactionName" placeholder="Enter transaction name" />
+    </div>
+
+    <div class="form-group">
+        <label for="transactionType">Transaction Type</label>
+        <select id="transactionType" class="form-control" @bind="Transaction.TransactionType">
+            <option value="">Give transaction type</option>
+            @foreach (var type in Enum.GetValues(typeof(TransactionType)))
+            {
+                <option value="@type">@type</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="transactionDescription">Transaction Description</label>
+        <input id="transactionDescription" type="text" class="form-control" @bind="Transaction.TransactionDescription" placeholder="Enter description" />
+    </div>
+
+    <div class="form-group">
+        <label for="transactionDate">Transaction Amount</label>
+        <input id="transactionDate" type="number" class="form-control" @bind="Transaction.TransactionAmount" />
+    </div>
+
+    <div class="form-group">
+        <label for="transactionRemark">Transaction Remark</label>
+        <input id="transactionRemark" type="text" class="form-control" @bind="Transaction.TransactionRemark" placeholder="Enter remark" />
+    </div>
+
+    <div class="form-group">
+        <label for="transactionTag">Transaction Tag</label>
+        <select id="transactionTag" class="form-control" @bind="Transaction.TransactionTag">
+            <option value="">Choose the tag</option>
+            @foreach (var tag in Enum.GetValues(typeof(TransctionTag)))
+            {
+                <option value="@tag">@tag</option>
+            }
+        </select>
+    </div>
+    @if (_sucess == true)
+    {
+        <div class="alert alert-success">@sucessMessages</div>
+    }
+    else
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+    }
+
+    <button type="submit" class="btn btn-primary">Add Transaction</button>
+</form>
+
+

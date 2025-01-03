@@ -1,0 +1,71 @@
+﻿@page "/cashinflow"
+@using DataModel.Model
+
+<main>
+    <div class="page flex-row">
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+
+        <div class="content">
+            <div class="flex-row">
+                <h1>Income</h1>
+
+                @if (!buttonClicked)
+                {
+                    <button class="btn btn-primary" @onclick="ShowForm">Add Transaction</button>
+                }
+                else
+                {
+                    <button class="btn btn-primary" @onclick="HideFormAsync">Back</button>
+                }
+
+
+            </div>
+            @if (buttonClicked)
+            {
+                <TranctionForm/>
+            }
+            else
+            {
+                <div class="transaction-table mt-4">
+                    <h2>Transaction Details</h2>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Transaction Name</th>
+                                <th>Amount</th>
+                                <th>Description</th>
+                                <th>Date</th>
+                                <th>Remark</th>
+                                <th>Tag</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var transaction in Tranction)
+                            {
+                                <tr>
+                                    <td>@transaction.TransactionName</td>
+                                    <td>@transaction.TransactionAmount</td>
+                                    <td>@transaction.TransactionDescription</td>
+                                    <td>@transaction.TransactionDate.ToString("yyyy-MM-dd")</td>
+                                    <td>@transaction.TransactionRemark</td>
+                                    <td>@transaction.TransactionTag</td>
+                                    <td>
+                                        @* <button @onclick="() => EditTransaction(transaction)" class="btn btn-warning">Edit</button> *@
+                                        <button @onclick="()=>DeleteTranction(transaction.TransactionId)" class="btn btn-danger">Delete</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            
+        </div>
+    </div>
+</main>
+
+

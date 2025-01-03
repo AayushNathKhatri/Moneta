@@ -4,6 +4,7 @@ namespace Moneta.Components.Pages
 {
     public partial class Login
     {
+        private Currency Currency { get; set; }
         private string? errorMessage;
         public UserModel users { get; set; } = new();
 
@@ -12,7 +13,8 @@ namespace Moneta.Components.Pages
             {
                 Nav.NavigateTo("/home");
             }
-            else {
+            else 
+            {
                 errorMessage = "Invalid username or password";
             }
         }

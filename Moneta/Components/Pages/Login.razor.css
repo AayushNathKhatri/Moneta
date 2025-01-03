@@ -1,7 +1,7 @@
 ﻿body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #d8e5d4;
+    background-color: white;
 }
 
 .login-container {
@@ -17,12 +17,11 @@
     max-width: 1000px;
     background-color: white;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
 .left-section {
-    background-color: #d8e5d4;
+    background-color: white;
     color: black;
     flex: 1;
     padding: 40px;
