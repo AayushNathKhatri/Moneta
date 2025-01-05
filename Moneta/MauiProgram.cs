@@ -24,6 +24,7 @@ namespace Moneta
     		builder.Logging.AddDebug();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITranctionService, TransactionService>();
+            builder.Services.AddScoped<IDebtService, DebtService>();
             builder.Services.AddMudServices();
 #endif
 

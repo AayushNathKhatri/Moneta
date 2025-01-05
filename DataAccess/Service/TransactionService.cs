@@ -40,9 +40,28 @@ namespace DataAccess.Service
             return _transaction;
         }
 
-        public async Task<bool> UpdateTranction(TransactionModel transaction)
+        public async Task<TransactionModel> GetTranctionById(Guid TranctionID)
         {
-            throw new NotImplementedException();
+            var transaction = _transaction.FirstOrDefault(t => t.TransactionId == TranctionID);
+            return transaction;
+        }
+
+        public async Task<bool> UpdateTranction(Guid TransactionId, TransactionModel transaction)
+        {
+            var updateUser = _transaction.FirstOrDefault(t => t.TransactionId == TransactionId);
+            if (updateUser != null)
+            {
+                updateUser.TransactionName = transaction.TransactionName;
+                updateUser.TransactionRemark = transaction.TransactionRemark;
+                updateUser.TransactionTag = transaction.TransactionTag;
+                updateUser.TransactionAmount = transaction.TransactionAmount;
+                updateUser.TransactionDescription = transaction.TransactionDescription;
+                
+
+                SaveTranction(_transaction);
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -11,20 +11,27 @@
             <div class="flex-row">
                 <h1>Income</h1>
 
-                @if (!buttonClicked)
+                @if (!buttonClickedAdd)
                 {
-                    <button class="btn btn-primary" @onclick="ShowForm">Add Transaction</button>
+                    <button class="btn btn-primary" @onclick="ShowAddForm">Add Transaction</button>
                 }
                 else
                 {
-                    <button class="btn btn-primary" @onclick="HideFormAsync">Back</button>
+                    <button class="btn btn-primary" @onclick="HideAddForm">Back</button>
+                }
+                @if (buttonClickedUpdate)
+                {
+                    <button class="btn btn-primary" @onclick="HideUpdateForm">Back</button>
                 }
 
-
             </div>
-            @if (buttonClicked)
+            @if (buttonClickedAdd)
             {
                 <TranctionForm/>
+            }
+            else if (showUpdateForm)
+            {
+                <UpdateTranction TranctionId="@TranID" />
             }
             else
             {
@@ -53,7 +60,7 @@
                                     <td>@transaction.TransactionRemark</td>
                                     <td>@transaction.TransactionTag</td>
                                     <td>
-                                        @* <button @onclick="() => EditTransaction(transaction)" class="btn btn-warning">Edit</button> *@
+                                        <button @onclick="() =>ShowUpdateForm(transaction.TransactionId)" class="btn btn-warning">Edit</button>
                                         <button @onclick="()=>DeleteTranction(transaction.TransactionId)" class="btn btn-danger">Delete</button>
                                     </td>
                                 </tr>

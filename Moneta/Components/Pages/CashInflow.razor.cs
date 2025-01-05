@@ -11,14 +11,28 @@ namespace Moneta.Components.Pages
             Tranction = await GetAllTanction();
         }
         private List<TransactionModel> Tranction = new();
-        private bool buttonClicked = false;
-        private void ShowForm() {
-            buttonClicked = true;
+        private bool buttonClickedAdd = false;
+        private Guid TranID;
+        private bool showUpdateForm = false;
+        private bool buttonClickedUpdate = false;
+        private void ShowAddForm() {
+            buttonClickedAdd = true;
         }
 
-        private async Task HideFormAsync() { 
-            buttonClicked = false;
+        private async void HideAddForm() { 
+            buttonClickedAdd = false;
             Tranction = await GetAllTanction();
+        }
+        private async void HideUpdateForm() {
+            buttonClickedUpdate = false;
+            showUpdateForm = false;
+            Tranction = await GetAllTanction();
+        }
+        public void ShowUpdateForm(Guid TranctionId)
+        {
+            TranID = TranctionId;
+            showUpdateForm = true;
+            buttonClickedUpdate = true;
         }
         private async Task<List<TransactionModel>> GetAllTanction() 
         {

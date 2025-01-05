@@ -1,14 +1,147 @@
 ﻿@page "/debts"
+@using DataModel.Model
+
+
 <main>
     <div class="page flex-row">
-
         <div class="sidebar">
             <NavMenu />
         </div>
-
         <div class="content">
             <div class="flex-row">
                 <h1>Debts</h1>
+
+                <!-- Add Debt Button -->
+                @if (!isFormVisible && !isUpdateMode)
+                {
+                    <button class="btn btn-primary" @onclick="ShowAddForm">Add Debt</button>
+                }
+                else
+                {
+                    <button class="btn btn-secondary" @onclick="HideForm">Back</button>
+                }
+            </div>
+
+
+            <!-- Add Debt Form -->
+            @if (isFormVisible && !isUpdateMode)
+            {
+                <div class="form-group mt-4">
+                    <h3>Add Debt</h3>
+
+                    <div class="form-group">
+                        <label for="debtSource">Debt Source</label>
+                        <input id="debtSource" type="text" class="form-control" @bind="Debt.DebtSource" placeholder="Enter debt source" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <input id="amount" type="number" class="form-control" @bind="Debt.DebtAmount" placeholder="Enter amount" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dueDate">Due Date</label>
+                        <input id="dueDate" type="date" class="form-control" @bind="Debt.DebtDeuDate" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="debtRemark">Debt Remark</label>
+                        <input id="debtRemark" type="text" class="form-control" @bind="Debt.DebtRemark" placeholder="Enter remark" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="debtStatus">Debt Status</label>
+                        <select id="debtStatus" class="form-control" @bind="Debt.DebtStatus">
+                            @foreach (var status in Enum.GetValues(typeof(DebtStatus)))
+                            {
+                                <option value="@status">@status</option>    
+                            }
+                        </select>
+                    </div>
+                    @if (_sucess == true)
+                    {
+                        <div class="alert alert-success">@sucessMessages</div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger">@errorMessage</div>
+                    }
+
+
+                    <button class="btn btn-primary" @onclick="SaveDebt">Save</button>
+                </div>
+            }
+
+            <!-- Update Debt Form -->
+            @if (isUpdateMode)
+            {
+                <div class="form-group mt-4">
+                    <h3>Update Debt</h3>
+
+                    <div class="form-group">
+                        <label for="debtSource">Debt Source</label>
+                        <input id="debtSource" type="text" class="form-control" @bind="Debt.DebtSource" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <input id="amount" type="number" class="form-control" @bind="Debt.DebtAmount" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dueDate">Due Date</label>
+                        <input id="dueDate" type="date" class="form-control" @bind="Debt.DebtDeuDate" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="debtRemark">Debt Remark</label>
+                        <input id="debtRemark" type="text" class="form-control" @bind="Debt.DebtRemark" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="debtStatus">Debt Status</label>
+                        <select id="debtStatus" class="form-control" @bind="Debt.DebtStatus">
+                            <option value="Pending">Pending</option>
+                            <option value="Cleared">Cleared</option>
+                        </select>
+                    </div>
+
+                    @* <button class="btn btn-warning" @onclick="UpdateDebt">Update</button> *@
+                </div>
+            }
+
+            <!-- Debts Table -->
+            <div class="mt-4">
+                <h3>Debt List</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Debt Source</th>
+                            <th>Amount</th>
+                            <th>Due Date</th>
+                            <th>Remark</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var debt in DebtStore)
+                        {
+                            <tr>
+                                <td>@debt.DebtSource</td>
+                                <td>@debt.DebtAmount</td>
+                                <td>@debt.DebtDeuDate.ToString("yyyy-MM-dd")</td>
+                                <td>@debt.DebtRemark</td>
+                                <td>@debt.DebtStatus</td>
+                                <td>
+                                    @* <button @onclick="() => EditDebt(debt)" class="btn btn-warning">Update</button> *@
+                                    @* <button @onclick="() => ClearDebt(debt)" class="btn btn-success">Clear</button> *@
+                                    @* <button @onclick="() => DeleteDebt(debt.DebtId)" class="btn btn-danger">Delete</button> *@
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
