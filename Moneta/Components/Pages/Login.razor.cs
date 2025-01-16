@@ -18,5 +18,8 @@ namespace Moneta.Components.Pages
                 errorMessage = "Invalid username or password";
             }
         }
+        private void CloseMe() { 
+            errorMessage = string.Empty;
+        }
     }
 }

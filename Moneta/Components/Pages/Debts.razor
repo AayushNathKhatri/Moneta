@@ -1,7 +1,5 @@
-﻿@page "/debts"
-@using DataModel.Model
-
-
+﻿@using DataModel.Model
+@page "/debts"
 <main>
     <div class="page flex-row">
         <div class="sidebar">
@@ -11,8 +9,9 @@
             <div class="flex-row">
                 <h1>Debts</h1>
 
+
                 <!-- Add Debt Button -->
-                @if (!isFormVisible && !isUpdateMode)
+                @if (!isFormVisible)
                 {
                     <button class="btn btn-primary" @onclick="ShowAddForm">Add Debt</button>
                 }
@@ -22,127 +21,111 @@
                 }
             </div>
 
-
-            <!-- Add Debt Form -->
-            @if (isFormVisible && !isUpdateMode)
+            <!-- Add/Update Debt Form -->
+            @if (isFormVisible)
             {
                 <div class="form-group mt-4">
-                    <h3>Add Debt</h3>
+                    <h3>@(isUpdateMode ? "Update Debt" : "Add Debt")</h3>
 
                     <div class="form-group">
                         <label for="debtSource">Debt Source</label>
-                        <input id="debtSource" type="text" class="form-control" @bind="Debt.DebtSource" placeholder="Enter debt source" />
+                        <input id="debtSource" type="text" class="form-control" @bind="Debt.DebtSource" placeholder="Enter debt source" required/>
                     </div>
 
                     <div class="form-group">
                         <label for="amount">Amount</label>
-                        <input id="amount" type="number" class="form-control" @bind="Debt.DebtAmount" placeholder="Enter amount" />
+                        <input id="amount" type="number" class="form-control" @bind="Debt.DebtAmount" placeholder="Enter amount" required/>
                     </div>
 
                     <div class="form-group">
                         <label for="dueDate">Due Date</label>
-                        <input id="dueDate" type="date" class="form-control" @bind="Debt.DebtDeuDate" />
+                        <input id="dueDate" type="date" class="form-control" @bind="Debt.DebtDeuDate" required/>
                     </div>
 
                     <div class="form-group">
                         <label for="debtRemark">Debt Remark</label>
-                        <input id="debtRemark" type="text" class="form-control" @bind="Debt.DebtRemark" placeholder="Enter remark" />
+                        <input id="debtRemark" type="text" class="form-control" @bind="Debt.DebtRemark" placeholder="Enter remark" required/>
                     </div>
 
                     <div class="form-group">
                         <label for="debtStatus">Debt Status</label>
-                        <select id="debtStatus" class="form-control" @bind="Debt.DebtStatus">
+                        <select id="debtStatus" class="form-control" @bind="Debt.DebtStatus" required>
                             @foreach (var status in Enum.GetValues(typeof(DebtStatus)))
                             {
-                                <option value="@status">@status</option>    
+                                <option value="@status">@status</option>
                             }
                         </select>
                     </div>
-                    @if (_sucess == true)
+
+                    @if (!string.IsNullOrEmpty(Message))
                     {
-                        <div class="alert alert-success">@sucessMessages</div>
-                    }
-                    else
-                    {
-                        <div class="alert alert-danger">@errorMessage</div>
+                        <div class="alert @AlertClass">@Message</div>
                     }
 
-
-                    <button class="btn btn-primary" @onclick="SaveDebt">Save</button>
+                    <button class="btn btn-primary" @onclick="SaveOrUpdateDebt">@((isUpdateMode ? "Update" : "Save"))</button>
                 </div>
             }
 
-            <!-- Update Debt Form -->
-            @if (isUpdateMode)
+            @if (!isFormVisible)
             {
-                <div class="form-group mt-4">
-                    <h3>Update Debt</h3>
-
-                    <div class="form-group">
-                        <label for="debtSource">Debt Source</label>
-                        <input id="debtSource" type="text" class="form-control" @bind="Debt.DebtSource" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="amount">Amount</label>
-                        <input id="amount" type="number" class="form-control" @bind="Debt.DebtAmount" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="dueDate">Due Date</label>
-                        <input id="dueDate" type="date" class="form-control" @bind="Debt.DebtDeuDate" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="debtRemark">Debt Remark</label>
-                        <input id="debtRemark" type="text" class="form-control" @bind="Debt.DebtRemark" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="debtStatus">Debt Status</label>
-                        <select id="debtStatus" class="form-control" @bind="Debt.DebtStatus">
-                            <option value="Pending">Pending</option>
-                            <option value="Cleared">Cleared</option>
-                        </select>
-                    </div>
-
-                    @* <button class="btn btn-warning" @onclick="UpdateDebt">Update</button> *@
+                <div class="mt-4">
+                    <h3>Debt List</h3>
+                    <input id="search"
+                           type="text"
+                           placeholder="Search.."
+                           @bind="searchInput"
+                           class="search-input"
+                           @oninput="OnSearchInputChange" />
+                </div>
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Debt Source</th>
+                                <th>Amount</th>
+                                <th>
+                                    Due Date
+                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowDropUp" Color="Color.Primary" Size="Size.Small" />
+                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowDropDown" Color="Color.Primary" Size="Size.Small" />
+                                </th>
+                                <th>Remark</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (filteredDebts.Any())
+                            {
+                                @foreach (var debt in filteredDebts)
+                                {
+                                    <tr>
+                                        <td>@debt.DebtSource</td>
+                                        <td>@debt.DebtAmount</td>
+                                        <td>@debt.DebtDeuDate.ToString("yyyy-MM-dd")</td>
+                                        <td>@debt.DebtRemark</td>
+                                        <td>@debt.DebtStatus</td>
+                                        <td>
+                                            <button class="btn btn-warning" @onclick="() => ShowEditForm(debt)">Update</button>
+                                            <button class="btn btn-success" @onclick="() => ClearDebt(debt.DebtId)">Clear</button>
+                                            <button class="btn btn-danger" @onclick="() => DeleteDebt(debt.DebtId)">Delete</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="7" class="text-center">No Debts Found.</td>
+                                </tr>
+                            }
+                            @if (!string.IsNullOrEmpty(Message))
+                            {
+                                <div class="alert @AlertClass">@Message</div>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             }
-
-            <!-- Debts Table -->
-            <div class="mt-4">
-                <h3>Debt List</h3>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Debt Source</th>
-                            <th>Amount</th>
-                            <th>Due Date</th>
-                            <th>Remark</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var debt in DebtStore)
-                        {
-                            <tr>
-                                <td>@debt.DebtSource</td>
-                                <td>@debt.DebtAmount</td>
-                                <td>@debt.DebtDeuDate.ToString("yyyy-MM-dd")</td>
-                                <td>@debt.DebtRemark</td>
-                                <td>@debt.DebtStatus</td>
-                                <td>
-                                    @* <button @onclick="() => EditDebt(debt)" class="btn btn-warning">Update</button> *@
-                                    @* <button @onclick="() => ClearDebt(debt)" class="btn btn-success">Clear</button> *@
-                                    @* <button @onclick="() => DeleteDebt(debt.DebtId)" class="btn btn-danger">Delete</button> *@
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
         </div>
     </div>
 </main>

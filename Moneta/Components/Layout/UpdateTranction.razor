@@ -4,17 +4,17 @@
     <form class="form" @onsubmit="HandelSubmit">
         <div class="form-group">
             <label for="transactionName">Transaction Name</label>
-            <input id="transactionName" type="text" class="form-control" @bind="Transaction.TransactionName" placeholder="Enter transaction name" />
+            <input id="transactionName" type="text" class="form-control" @bind="Transaction.TransactionName" placeholder="Enter transaction name" required/>
         </div>
 
         <div class="form-group">
             <label for="transactionRemark">Transaction Remark</label>
-            <input id="transactionRemark" type="text" class="form-control" @bind="Transaction.TransactionRemark" placeholder="Enter transaction remark" />
+            <input id="transactionRemark" type="text" class="form-control" @bind="Transaction.TransactionRemark" placeholder="Enter transaction remark" required/>
         </div>
 
         <div class="form-group">
             <label for="transactionTag">Transaction Tag</label>
-            <select id="transactionTag" class="form-control" @bind="Transaction.TransactionTag">
+            <select id="transactionTag" class="form-control" @bind="Transaction.TransactionTag" required>
                 @foreach (var tag in Enum.GetValues(typeof(TransctionTag)))
                 {
                     <option value="@tag">@tag</option>
@@ -24,12 +24,12 @@
 
         <div class="form-group">
             <label for="transactionAmount">Transaction Amount</label>
-            <input id="transactionAmount" type="number" class="form-control" @bind="Transaction.TransactionAmount" placeholder="Enter transaction amount" />
+            <input id="transactionAmount" type="number" class="form-control" @bind="Transaction.TransactionAmount" placeholder="Enter transaction amount" required/>
         </div>
 
         <div class="form-group">
             <label for="transactionDescription">Transaction Description</label>
-            <textarea id="transactionDescription" class="form-control" @bind="Transaction.TransactionDescription" placeholder="Enter transaction description"></textarea>
+            <textarea id="transactionDescription" class="form-control" @bind="Transaction.TransactionDescription" placeholder="Enter transaction description" required></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary">Update Transaction</button>

@@ -8,5 +8,6 @@ namespace DataAccess.Service.Interface
         Task<bool> UpdateDebt(Guid DebtId, DebtsModel debts);
         Task<bool> ClearDebt(Guid DebtdId, DebtStatus currentStatus);
         Task<List<DebtsModel>> GetDebt();
+        Task<bool> DeleteDebt(Guid DebtId);
     }
 }

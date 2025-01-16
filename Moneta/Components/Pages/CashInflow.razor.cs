@@ -1,32 +1,37 @@
 using DataModel.Model;
+using Microsoft.AspNetCore.Components;
 
 
 namespace Moneta.Components.Pages
 {
     public partial class CashInflow
     {
-        private string? failedMessege;
+        private string? deleteMessege;
         protected override async Task OnInitializedAsync()
         {
             Tranction = await GetAllTanction();
+            filteredTransactions = Tranction;
         }
         private List<TransactionModel> Tranction = new();
         private bool buttonClickedAdd = false;
         private Guid TranID;
         private bool showUpdateForm = false;
         private bool buttonClickedUpdate = false;
+        private string searchInput = string.Empty;
+        private List<TransactionModel> filteredTransactions;
+        private SortingState sortingState = SortingState.Default;
         private void ShowAddForm() {
             buttonClickedAdd = true;
         }
 
         private async void HideAddForm() { 
             buttonClickedAdd = false;
-            Tranction = await GetAllTanction();
+            filteredTransactions = await GetAllTanction();
         }
         private async void HideUpdateForm() {
             buttonClickedUpdate = false;
             showUpdateForm = false;
-            Tranction = await GetAllTanction();
+            filteredTransactions = await GetAllTanction();
         }
         public void ShowUpdateForm(Guid TranctionId)
         {
@@ -52,12 +57,46 @@ namespace Moneta.Components.Pages
 
             if (result)
             {
+                deleteMessege = "Transaction Deleted Successfully";
                 Tranction = await GetAllTanction();
+                filteredTransactions = ApplySearchFilter();// Reapply search filter
+                SortByDate(sortingState);
             }
             else
             {
-                failedMessege = "Deletetion Failed";
+                deleteMessege = "Deletetion Failed";
             }
+            StateHasChanged();
+
+        }
+        private List<TransactionModel> ApplySearchFilter()
+        {
+            return Tranction
+                .Where(t =>
+                    string.IsNullOrEmpty(searchInput) ||
+                    (t.TransactionName?.Contains(searchInput, StringComparison.OrdinalIgnoreCase) ?? false))
+                .ToList();
+        }
+        private void OnSearchInputChange(ChangeEventArgs e)
+        {
+            searchInput = e.Value?.ToString() ?? string.Empty;
+
+            filteredTransactions = Tranction
+                .Where(t =>
+                    string.IsNullOrEmpty(searchInput) ||
+                    (t.TransactionName?.Contains(searchInput, StringComparison.OrdinalIgnoreCase) ?? false))
+                .ToList();
+            SortByDate(sortingState);
+        }
+        private void SortByDate(SortingState state)
+        {
+            sortingState = state;
+            filteredTransactions = sortingState switch
+            {
+                SortingState.Ascending => filteredTransactions.OrderBy(t => t.TransactionDate).ToList(),
+                SortingState.Descending => filteredTransactions.OrderByDescending(t => t.TransactionDate).ToList(),
+                _ => Tranction
+            };
         }
     }
 }

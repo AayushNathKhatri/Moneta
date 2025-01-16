@@ -7,7 +7,24 @@
         <MudNavLink Href="/cashinflow" Icon="@Icons.Material.Filled.CallMissed" IconColor="Color.Success">Income</MudNavLink>
         <MudNavLink Href="/cashoutflow" Icon="@Icons.Material.Filled.CallMissedOutgoing" IconColor="Color.Error">Expenditure</MudNavLink>
         <MudNavLink Href="/debts" Icon="@Icons.Material.Filled.MoneyOff" IconColor="Color.Warning">Debts</MudNavLink>
-        <MudNavLink Href="/stats" Icon="@Icons.Material.Filled.BarChart">Stats</MudNavLink>
-        <MudNavLink Href="/logout" Icon="@Icons.Material.Filled.Logout">Logout</MudNavLink>
+        <MudNavLink Icon="@Icons.Material.Filled.Logout" OnClick="Dialog">Logout</MudNavLink>
     </MudNavMenu>
 </MudPaper>
+@code {
+
+    [Inject] private IDialogService DialogService { get; set; }
+
+
+    private async void Dialog()
+    {
+        bool? result = await DialogService.ShowMessageBox(
+            "Logut?",
+            "Confirm Logout",
+            yesText: "Yes", cancelText: "No");
+        if(result == true)
+        {
+            Nav.NavigateTo("/login");    
+        }
+        
+    }
+}

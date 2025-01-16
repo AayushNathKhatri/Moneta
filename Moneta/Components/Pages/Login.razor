@@ -11,14 +11,14 @@
                 <div class="logo">MONETA</div>
                 <form class="login-form" @onsubmit = "HandelLogin">
                     <label for="username">Username</label>
-                    <input type="text" @bind="users.Username" placeholder="Enter your username"/>
+                    <input type="text" @bind="users.Username" placeholder="Enter your username" required/>
 
                     <label for="password">Password</label>
-                    <input type="password" @bind="users.Password" placeholder="Enter your password">
+                    <input type="password" @bind="users.Password" placeholder="Enter your password" required>
 
                     <label for="currency">Currency</label>
                     <select id="currency"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" @bind="users.Currency" required>
                         <option value="">Choose an option</option>
                         @foreach (var curreny in Enum.GetValues(typeof(Currency)))
                         {
@@ -28,7 +28,7 @@
 
                     @if (!string.IsNullOrEmpty(errorMessage))
                     {
-                        <div class="alert alert-danger">@errorMessage</div>
+                        <MudAlert Severity="Severity.Error" ShowCloseIcon="true" CloseIconClicked="(() => CloseMe())">@errorMessage</MudAlert>
                     }
                     <button type="submit">Login</button>
                 </form>

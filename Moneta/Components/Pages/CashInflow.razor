@@ -37,35 +37,63 @@
             {
                 <div class="transaction-table mt-4">
                     <h2>Transaction Details</h2>
+                    <div class="search-filter">
+                        <label for="search"><MudIcon Icon="@Icons.Material.Filled.Search" Color="Color.Primary" Size="Size.Small" /></label>
+                        <input id="search"
+                               type="text"
+                               placeholder="Search.."
+                               @bind="searchInput"
+                               class="search-input"
+                               @oninput="OnSearchInputChange" />
+                    </div>
+
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Transaction Name</th>
                                 <th>Amount</th>
                                 <th>Description</th>
-                                <th>Date</th>
+                                <th>Date
+                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowDropUp" Color="Color.Primary" Size="Size.Small" OnClick="() => SortByDate(SortingState.Ascending)"/>
+                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowDropDown" Color="Color.Primary" Size="Size.Small" OnClick="() => SortByDate(SortingState.Descending)" />
+                                </th>
                                 <th>Remark</th>
                                 <th>Tag</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var transaction in Tranction)
+                            @if (filteredTransactions.Any())
+                            {
+                                @foreach (var transaction in filteredTransactions)
+                                {
+                                    <tr>
+                                        <td>@transaction.TransactionName</td>
+                                        <td>@transaction.TransactionDescription</td>
+                                        <td>@transaction.TransactionAmount</td>
+                                        <td>@transaction.TransactionDate</td>
+                                        <td>@transaction.TransactionRemark</td>
+                                        <td>@transaction.TransactionTag</td>
+                                        <td>
+                                            <button @onclick="() => ShowUpdateForm(transaction.TransactionId)" class="btn btn-warning">Edit</button>
+                                            <button @onclick="() => DeleteTranction(transaction.TransactionId)" class="btn btn-danger">Delete</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
                             {
                                 <tr>
-                                    <td>@transaction.TransactionName</td>
-                                    <td>@transaction.TransactionAmount</td>
-                                    <td>@transaction.TransactionDescription</td>
-                                    <td>@transaction.TransactionDate.ToString("yyyy-MM-dd")</td>
-                                    <td>@transaction.TransactionRemark</td>
-                                    <td>@transaction.TransactionTag</td>
-                                    <td>
-                                        <button @onclick="() =>ShowUpdateForm(transaction.TransactionId)" class="btn btn-warning">Edit</button>
-                                        <button @onclick="()=>DeleteTranction(transaction.TransactionId)" class="btn btn-danger">Delete</button>
-                                    </td>
+                                    <td colspan="7" class="text-center">No transactions found.</td>
                                 </tr>
                             }
                         </tbody>
+                        @if (!string.IsNullOrEmpty(deleteMessege))
+                        {
+                            <div class="alert alert-info">
+                                @deleteMessege
+                            </div>
+                        }
                     </table>
                 </div>
             }

@@ -16,7 +16,6 @@ namespace Moneta.Components.Layout
         public TransactionModel Transaction { get; set; } = new();
         protected override async Task OnInitializedAsync()
         {
-            // Fetch the transaction data using the TranctionId
             var transaction = await TranctionService.GetTranctionById(TranctionId);
             if (transaction != null)
             {

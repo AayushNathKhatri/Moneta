@@ -48,14 +48,14 @@ namespace DataAccess.Service
 
         public async Task<bool> UpdateTranction(Guid TransactionId, TransactionModel transaction)
         {
-            var updateUser = _transaction.FirstOrDefault(t => t.TransactionId == TransactionId);
-            if (updateUser != null)
+            var updateTransaction = _transaction.FirstOrDefault(t => t.TransactionId == TransactionId);
+            if (updateTransaction != null)
             {
-                updateUser.TransactionName = transaction.TransactionName;
-                updateUser.TransactionRemark = transaction.TransactionRemark;
-                updateUser.TransactionTag = transaction.TransactionTag;
-                updateUser.TransactionAmount = transaction.TransactionAmount;
-                updateUser.TransactionDescription = transaction.TransactionDescription;
+                updateTransaction.TransactionName = transaction.TransactionName;
+                updateTransaction.TransactionRemark = transaction.TransactionRemark;
+                updateTransaction.TransactionTag = transaction.TransactionTag;
+                updateTransaction.TransactionAmount = transaction.TransactionAmount;
+                updateTransaction.TransactionDescription = transaction.TransactionDescription;
                 
 
                 SaveTranction(_transaction);

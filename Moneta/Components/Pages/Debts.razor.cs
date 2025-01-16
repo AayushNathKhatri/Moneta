@@ -1,51 +1,142 @@
 using DataModel.Model;
-using System.Transactions;
+using Microsoft.AspNetCore.Components;
 
 namespace Moneta.Components.Pages
 {
     public partial class Debts
     {
-        private bool isFormVisible = false;   
-        private bool isUpdateMode = false;
-        private bool _sucess;
-        private string? sucessMessages = "Transaction Stored";
-        private string? errorMessage = "Please Fill all the field";
-        private DebtsModel Debt { get; set; } = new();
-        private List<DebtsModel> DebtStore = new();
-
         protected override async Task OnInitializedAsync()
         {
-            DebtStore = await GetDebt();
-
+            await LoadDebts();
+            DebtStore = await DebtService.GetDebt();
+            Tranction = await TranctionService.GetTranction();
+            var result = await Calculate.Calculate(DebtStore, Tranction);
+            totalCurrentBalance = result.TotalCurrentBalance;
+            totalCurrentBalancewithDebt =result.TotalCurrentBalanceWithDebt;
+            filteredDebts = DebtStore;
         }
-        private async void ShowAddForm()
+        private bool isFormVisible;
+        private bool isUpdateMode;
+        private bool _isSuccess;
+        private bool _debtClear = false;
+        private string? Message;
+        private double totalCurrentBalance;
+        private double totalCurrentBalancewithDebt;
+        private string searchInput;
+        private List<DebtsModel> filteredDebts;
+        private Guid? clearingDebtId;
+        private string AlertClass = string.Empty;
+        private DebtsModel Debt { get; set; } = new();
+        private List<DebtsModel> DebtStore = new();
+        private List<TransactionModel> Tranction = new ();
+        private bool result;
+
+
+
+        private async Task LoadDebts()
+        {
+            DebtStore = await DebtService.GetDebt() ?? new List<DebtsModel>();
+        }
+
+        private void ShowAddForm()
         {
             isFormVisible = true;
             isUpdateMode = false;
-            DebtStore = await GetDebt();
+            Debt = new DebtsModel(); // Reset the model for a new entry
         }
+
+        private void ShowEditForm(DebtsModel debt)
+        {
+            isFormVisible = true;
+            isUpdateMode = true;
+            Debt = debt; // Bind the existing debt for editing
+        }
+
         private void HideForm()
         {
             isFormVisible = false;
+            isUpdateMode = false;
+            Message = null;
         }
-        private async Task<List<DebtsModel>>GetDebt() {
-            var debts = await DebtService.GetDebt();
-            return debts ?? new List<DebtsModel>();
-        }
-        private async void SaveDebt() {
-            Debt.DebtTaken = DateTime.Now;
-            if (await DebtService.CreateDebt(Debt))
-            {
-                _sucess = true;
 
+        private async Task SaveOrUpdateDebt()
+        {
+
+            if (isUpdateMode)
+            {
+                result = await DebtService.UpdateDebt(Debt.DebtId, Debt);
             }
             else
             {
-                _sucess = false;
+                if (Debt.DebtDeuDate >= DateTime.Now) {
+                    Debt.DebtTaken = DateTime.Now;
+                    result = await DebtService.CreateDebt(Debt);
+                }
+
+            }
+
+            _isSuccess = result;
+            Message = result ? "Operation successful!" : "Operation failed. Please try again.";
+
+            if (result)
+            {
+                await LoadDebts();
+                HideForm();
             }
         }
-        private async void ClearDebt() { 
-            
+
+        private async Task ClearDebt(Guid debtId)
+        {
+            var debt = filteredDebts.FirstOrDefault(d => d.DebtId == debtId);
+            if (debt != null)
+            {
+                if (debt.DebtStatus == DebtStatus.paid)
+                {
+                    // Debt is already cleared
+                    Message = "This debt has already been cleared.";
+                    AlertClass = "alert-warning";  // Yellow for already cleared
+                }
+                else
+                {
+                    // Simulate clearing the debt
+                    debt.DebtStatus = DebtStatus.paid;  // Set debt status to 'Cleared'
+                    Message = "Debt has been successfully cleared.";
+                    AlertClass = "alert-success";  // Green for successful clear
+                }
+            }
+            else
+            {
+                Message = "Error clearing the debt.";
+                AlertClass = "alert-danger";  // Red for unsuccessful
+            }
+
+            StateHasChanged();  // Refresh the UI
         }
+
+        private async Task DeleteDebt(Guid debtId)
+        {
+            bool result = await DebtService.DeleteDebt(debtId);
+            _isSuccess = result;
+            Message = result ? "Debt deleted successfully!" : "Failed to delete the debt.";
+            await LoadDebts();
+        }
+        private List<DebtsModel> GetFilteredDebts()
+        {
+            if (string.IsNullOrWhiteSpace(searchInput))
+            {
+                return DebtStore;
+            }
+
+            return DebtStore
+                .Where(t =>
+                    (!string.IsNullOrEmpty(t.DebtSource) && t.DebtSource.Contains(searchInput, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+        }
+        private void OnSearchInputChange(ChangeEventArgs e)
+        {
+            searchInput = e.Value.ToString();
+            filteredDebts = GetFilteredDebts();
+        }
+
     }
 }

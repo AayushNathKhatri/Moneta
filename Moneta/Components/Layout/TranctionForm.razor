@@ -23,18 +23,18 @@
     </div>
 
     <div class="form-group">
-        <label for="transactionDate">Transaction Amount</label>
-        <input id="transactionDate" type="number" class="form-control" @bind="Transaction.TransactionAmount" />
+        <label for="transactionAmount">Transaction Amount</label>
+        <input id="transactionAmount" type="number" class="form-control" @bind="Transaction.TransactionAmount" />
     </div>
 
     <div class="form-group">
         <label for="transactionRemark">Transaction Remark</label>
-        <input id="transactionRemark" type="text" class="form-control" @bind="Transaction.TransactionRemark" placeholder="Enter remark" />
+        <input id="transactionRemark" type="text" class="form-control" @bind="Transaction.TransactionRemark" placeholder="Enter remark" required />
     </div>
 
     <div class="form-group">
         <label for="transactionTag">Transaction Tag</label>
-        <select id="transactionTag" class="form-control" @bind="Transaction.TransactionTag">
+        <select id="transactionTag" class="form-control" @bind="Transaction.TransactionTag" required>
             <option value="">Choose the tag</option>
             @foreach (var tag in Enum.GetValues(typeof(TransctionTag)))
             {
@@ -42,16 +42,20 @@
             }
         </select>
     </div>
-    @if (_sucess == true)
+
+    @if (_sucess)
     {
         <div class="alert alert-success">@sucessMessages</div>
     }
-    else
+    else if (!string.IsNullOrEmpty(expenditureFail))
+    {
+        <div class="alert alert-danger">@expenditureFail</div>
+    }
+    else if (!string.IsNullOrEmpty(errorMessage))
     {
         <div class="alert alert-danger">@errorMessage</div>
     }
 
     <button type="submit" class="btn btn-primary">Add Transaction</button>
 </form>
-
 

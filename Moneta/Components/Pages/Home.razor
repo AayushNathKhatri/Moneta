@@ -9,9 +9,38 @@
 
         <div class="content">
             <div class="flex-row">
-                <h1>Hello World</h1>
+                <h6>Total Amount: @totalCurnetBalanceWithDebt</h6>
+                <h6>Total Debts: @totalDebtPending</h6>
+                <h6>Total Expenses: @totalExpense</h6>
+                <h6>Total Income: @totalIncome</h6>
+
             </div>
+            <div>
+                <div>
+                    <MudPaper Class="pa-4">
+                        <h3 class="text-center pb-2">Top 5 Income</h3>
+                        <MudChart ChartType="ChartType.Pie"
+                                  InputData="@chartDataIncome"
+                                  InputLabels="@chartLabelIncome"
+                                  Width="300px"
+                                  Height="300px" />
+                    </MudPaper>
+                </div>
+                <div>
+                    <MudPaper Class="pa-4">
+                        <h3 class="text-center pb-2">Top 5 Expenses</h3>
+                        <MudChart ChartType="ChartType.Pie"
+                                  InputData="@chartDataExp"
+                                  InputLabels="@chartLabelExp"
+                                  Width="300px"
+                                  Height="300px" />
+                    </MudPaper>
+                </div>
+
+            </div>
+
         </div>
+
     </div>
 </main>
 

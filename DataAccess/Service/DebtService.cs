@@ -60,6 +60,18 @@ namespace DataAccess.Service
             }
             return false;
         }
+        public async Task<bool> DeleteDebt(Guid DebtId) {
+            var debtDelete = _debts.FirstOrDefault(t => t.DebtId == DebtId);
+            if (debtDelete != null)
+            {
+                _debts.Remove(debtDelete);
+                SaveDebts(_debts);
+                return true;
+            }
+            else { 
+                return false;
+            }
+        }
     }
     
 }

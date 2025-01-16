@@ -8,5 +8,6 @@ namespace DataAccess.Service.Interface
         Task<bool> DeleteTranction(Guid TranctionID);
         Task<List<TransactionModel>> GetTranction();
         Task<TransactionModel> GetTranctionById(Guid TranctionID);
+       
     }
 }

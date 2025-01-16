@@ -25,6 +25,7 @@ namespace Moneta
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITranctionService, TransactionService>();
             builder.Services.AddScoped<IDebtService, DebtService>();
+            builder.Services.AddScoped<ICalculationService, CalaulationService>();
             builder.Services.AddMudServices();
 #endif
 
